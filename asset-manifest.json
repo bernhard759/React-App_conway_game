@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/React-App_conway_game/static/css/main.34f7d13e.css",
+    "main.js": "/React-App_conway_game/static/js/main.2ced3c8f.js",
+    "index.html": "/React-App_conway_game/index.html",
+    "main.34f7d13e.css.map": "/React-App_conway_game/static/css/main.34f7d13e.css.map",
+    "main.2ced3c8f.js.map": "/React-App_conway_game/static/js/main.2ced3c8f.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.34f7d13e.css",
+    "static/js/main.2ced3c8f.js"
+  ]
+}
