@@ -23,7 +23,7 @@ const operations = [
 ];
 const startSpeed = 2;
 
-/* Utility functions*/
+/* Leeres Grid erstellen */
 const generateEmptyGrid = () => {
   const rows = [];
   for (let i = 0; i < numRows; i++) {
@@ -31,6 +31,8 @@ const generateEmptyGrid = () => {
   }
   return rows;
 };
+
+/* Zufalls Grid erstellen */
 const generateRandomGrid = () => {
   const rows = [];
   for (let i = 0; i < numRows; i++) {
@@ -39,9 +41,62 @@ const generateRandomGrid = () => {
   return rows;
 };
 
+/* Gleiter Objekt erstellen */
+const generateGridWithGlider = () => {
+  /* Array erstellen */
+  const rows = [];
+  for (let i = 0; i < numRows; i++) {
+    rows.push(Array.from(Array(numCols), () => 0));
+  }
+  /* Mittlere Zelle finden (Startpunkt für das Objekt) */
+  const middleCellPos = [
+    Math.round((rows.length - 1) / 2),
+    Math.round((rows[0].length - 1) / 2),
+  ];
+  //console.log(middleCellPos)
+  /* Glider erstellen */
+  rows[middleCellPos[0] - 1][middleCellPos[1]] = 1;
+  rows[middleCellPos[0]][middleCellPos[1] + 1] = 1;
+  rows[middleCellPos[0] + 1][middleCellPos[1] - 1] = 1;
+  rows[middleCellPos[0] + 1][middleCellPos[1]] = 1;
+  rows[middleCellPos[0] + 1][middleCellPos[1] + 1] = 1;
+  /* Array zurück */
+  return rows;
+};
+
+/* Spaceship Objekt erstellen */
+const generateGridWithLWSpaceShip = () => {
+  /* Array erstellen */
+  const rows = [];
+  for (let i = 0; i < numRows; i++) {
+    rows.push(Array.from(Array(numCols), () => 0));
+  }
+  /* Mittlere Zelle finden (Startpunkt für das Objekt) */
+  const middleCellPos = [
+    Math.round((rows.length - 1) / 2),
+    Math.round((rows[0].length - 1) / 2),
+  ];
+  //console.log(middleCellPos)
+  /* Glider erstellen */
+  /* Reihe -1 */
+  rows[middleCellPos[0] - 1][middleCellPos[1] - 2] = 1;
+  rows[middleCellPos[0] - 1][middleCellPos[1] - 1] = 1;
+  rows[middleCellPos[0] - 1][middleCellPos[1]] = 1;
+  rows[middleCellPos[0] - 1][middleCellPos[1] + 1] = 1;
+  /* Reihe 0 */
+  rows[middleCellPos[0]][middleCellPos[1] - 3] = 1;
+  rows[middleCellPos[0]][middleCellPos[1] + 1] = 1;
+  /* Reihe 1 */
+  rows[middleCellPos[0] + 1][middleCellPos[1] + 1] = 1;
+  /* Reihe 2 */
+  rows[middleCellPos[0] + 2][middleCellPos[1] - 3] = 1;
+  rows[middleCellPos[0] + 2][middleCellPos[1]] = 1;
+  /* Array zurück */
+  return rows;
+};
+
 /* Function component */
 function App() {
-
   /* Simulation speed ref */
   const simSpeed = useRef(startSpeed);
 
@@ -108,7 +163,7 @@ function App() {
 
   /* Slider change */
   const handleSliderChange = function (event, newSpeed) {
-    console.log(newSpeed, "slider change");
+    //console.log(newSpeed, "slider change");
     simSpeed.current = newSpeed;
   };
 
@@ -141,15 +196,7 @@ function App() {
         Clear
       </Button>
       <Button
-        variant="contained"
-        style={{ margin: "1em" }}
-        onClick={() => {
-          setGrid(generateRandomGrid());
-        }}
-      >
-        Random
-      </Button>
-      <Button
+      style={{ marginRight: "2em" }}
         onClick={() => {
           /* Return if we are already running */
           if (runningRef.current) {
@@ -159,6 +206,33 @@ function App() {
         }}
       >
         Next Step
+      </Button>
+      <Button
+        variant="contained"
+        style={{ margin: "1em" }}
+        onClick={() => {
+          setGrid(generateRandomGrid());
+        }}
+      >
+        Random
+      </Button>
+      <Button
+        variant="contained"
+        style={{ margin: "1em" }}
+        onClick={() => {
+          setGrid(generateGridWithGlider());
+        }}
+      >
+        Create Glider
+      </Button>
+      <Button
+        variant="contained"
+        style={{ margin: "1em" }}
+        onClick={() => {
+          setGrid(generateGridWithLWSpaceShip());
+        }}
+      >
+        Create LW-Spaceship
       </Button>
       <div
         style={{
@@ -187,10 +261,10 @@ function App() {
       <div
         className="Grid"
         style={{
-          display: "inline-grid",
-          gridTemplateColumns: `repeat(${numCols}, 2em)`,
-          justifyContent: "center",
-          padding: "2px",
+          display: "grid",
+          width: "90%",
+          margin: "2em auto",
+          gridTemplateColumns: `repeat(${numCols}, auto)`,
         }}
       >
         {grid.map((rows, i) =>
@@ -205,9 +279,12 @@ function App() {
                 setGrid(newGrid); /* set the grid in the state */
               }}
               style={{
-                width: "2em",
-                height: "2em",
-                backgroundColor: grid[i][k] ? "#1976d2" : undefined,
+                padding: "0.15em",
+                backgroundColor: grid[i][k]
+                  ? "rgba(25, 118, 210, 0.65)"
+                  : undefined,
+                border: "1px solid rgba(25, 118, 210, 0.8)",
+                aspectRatio: "1", // quadrat
               }}
             />
           ))
@@ -216,7 +293,6 @@ function App() {
 
       <div id="overlay" ref={overlayDiv}>
         <div className="rules">
-          
           <List
             sx={{
               width: "100%",
@@ -224,17 +300,21 @@ function App() {
               margin: "auto",
               bgcolor: "background.paper",
               borderRadius: "1em",
-              padding: "4em"
+              padding: "4em",
             }}
           >
-            <CloseIcon style={{ position: "absolute", right: "1em", top: "0.5em"}} onClick={() => { overlayDiv.current.style.display = "none"; }}/>
+            <CloseIcon
+              style={{ position: "absolute", right: "1em", top: "0.5em" }}
+              onClick={() => {
+                overlayDiv.current.style.display = "none";
+              }}
+            />
             <h3>
               Rules (
               <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">
                 Wiki
               </a>
               )
-              
             </h3>
             <ListItem>
               Any live cell with fewer than two live neighbours dies, as if by
@@ -257,17 +337,18 @@ function App() {
       </div>
 
       <div className="footericon">
-        <Button className="infoBtn"  variant="contained" sx={{
-              padding: "1em",
-              borderRadius: "50%"
-            }} onClick={() => {
+        <Button
+          className="infoBtn"
+          variant="contained"
+          sx={{
+            padding: "1em",
+            borderRadius: "50%",
+          }}
+          onClick={() => {
             overlayDiv.current.style.display = "block";
-          }}>
-        <InfoOutlinedIcon
-          id="infoicon"
-          fontSize="large"
-          
-        />
+          }}
+        >
+          <InfoOutlinedIcon id="infoicon" fontSize="large" />
         </Button>
       </div>
     </div>
