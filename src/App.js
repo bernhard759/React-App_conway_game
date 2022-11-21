@@ -130,12 +130,29 @@ function App() {
               // check the bounds
               if (newI >= 0 && newI < numRows && newJ >= 0 && newJ < numCols) {
                 neighbours += g[newI][newJ]; // add 1 to the neighbours if cell has the value of 1
+              } else {
+                let newItmp = newI; 
+                let newJtmp = newJ;
+                // Offene Welt
+                if (newI < 0) {
+                  newItmp = numRows - 1;
+                }
+                if (newI >= numRows) {
+                  newItmp = 0;
+                }
+                if (newJ < 0) {
+                  newJtmp = numCols - 1;
+                }
+                if (newJ >= numCols) {
+                  newJtmp = 0;
+                }
+                neighbours += g[newItmp][newJtmp]; // add 1 to the neighbours if cell has the value of 1
               }
             });
 
             /* Rule 1 and 3 */
             if (neighbours < 2 || neighbours > 3) {
-              gridCopy[i][j] = 0;
+              gridCopy[i][j] = 0; // cell dies
             } else if (g[i][j] === 0 && neighbours === 3) {
               gridCopy[i][j] = 1; // cell becomes alive
             }
@@ -196,7 +213,7 @@ function App() {
         Clear
       </Button>
       <Button
-      style={{ marginRight: "2em" }}
+        style={{ marginRight: "2em" }}
         onClick={() => {
           /* Return if we are already running */
           if (runningRef.current) {
