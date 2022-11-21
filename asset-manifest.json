@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/React-App_conway_game/static/css/main.a7c734ef.css",
-    "main.js": "/React-App_conway_game/static/js/main.d376a646.js",
+    "main.css": "/React-App_conway_game/static/css/main.75368d12.css",
+    "main.js": "/React-App_conway_game/static/js/main.7999304c.js",
     "index.html": "/React-App_conway_game/index.html",
-    "main.a7c734ef.css.map": "/React-App_conway_game/static/css/main.a7c734ef.css.map",
-    "main.d376a646.js.map": "/React-App_conway_game/static/js/main.d376a646.js.map"
+    "main.75368d12.css.map": "/React-App_conway_game/static/css/main.75368d12.css.map",
+    "main.7999304c.js.map": "/React-App_conway_game/static/js/main.7999304c.js.map"
   },
   "entrypoints": [
-    "static/css/main.a7c734ef.css",
-    "static/js/main.d376a646.js"
+    "static/css/main.75368d12.css",
+    "static/js/main.7999304c.js"
   ]
 }
